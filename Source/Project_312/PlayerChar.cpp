@@ -25,7 +25,11 @@ APlayerChar::APlayerChar()
 void APlayerChar::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	//Add timer for stats decrease on player every 2 seconds
+	FTimerHandle StatsTimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(StatsTimerHandle, this, &APlayerChar::DecreaseStats, 2.0f, true);
+    
 }
 
 // Called every frame
@@ -76,5 +80,44 @@ void APlayerChar::StopJump()
 //Place holder for objects
 void APlayerChar::FindObject()
 {
+}
+
+void APlayerChar::SetHealth(float amount)
+{
+	if (Health + amount < 100)
+	{
+		Health = Health + amount;
+	}
+}
+
+void APlayerChar::SetHunger(float amount)
+{
+	if (Hunger + amount < 100)
+	{
+		Hunger = Hunger + amount;
+	}
+}
+
+void APlayerChar::SetStamina(float amount)
+{
+	if (Stamina + amount < 100)
+	{
+		Stamina = Stamina + amount;
+	}
+}
+
+void APlayerChar::DecreaseStats()
+{
+	if (Hunger > 0)
+	{
+		SetHunger(-1.0f);
+	}
+	
+	SetStamina(10.0f);
+
+	if (Hunger <= 0)
+	{
+		SetHealth(-3.0f);
+	}
 }
 
