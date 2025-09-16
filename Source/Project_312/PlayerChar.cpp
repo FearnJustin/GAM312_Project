@@ -108,28 +108,35 @@ void APlayerChar::FindObject()
 	{
 		AResource_M* HitResource = Cast<AResource_M>(HitResult.GetActor());
 
-		//If resource object found, give player resources and decrease resource object's total resources
-		if (HitResource)
+		if (Stamina > 5.0f)
 		{
-			FString hitName = HitResource->resourceName;
-			int resourceValue = HitResource->resourceAmount;
+			//If resource object found, give player resources and decrease resource object's total resources
+			if (HitResource)
+			{
+				FString hitName = HitResource->resourceName;
+				int resourceValue = HitResource->resourceAmount;
 
-			HitResource->totalResource = HitResource->totalResource - resourceValue;
+				HitResource->totalResource = HitResource->totalResource - resourceValue;
 			
-			//Only give resources if resource object has enough total resources
-			if (HitResource->totalResource > resourceValue)
-			{
-				GiveResource(resourceValue, hitName);
+				//Only give resources if resource object has enough total resources
+				if (HitResource->totalResource > resourceValue)
+				{
+					GiveResource(resourceValue, hitName);
 
-				check(GEngine != nullptr);
-				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Resource Collected"));
-			}
-			//If resource object does not have enough resources, destroy it
-			else
-			{
-				HitResource->Destroy();
-				check(GEngine != nullptr);
-				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Resource Depleted"));
+					check(GEngine != nullptr);
+					GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Resource Collected"));
+
+					UGameplayStatics::SpawnDecalAtLocation(GetWorld(), hitDecal, FVector(10.0f, 10.0f, 10.0f), HitResult.Location, FRotator(-90, 0, 0), 2.0f);
+
+					SetStamina(-5.0f);
+				}
+				//If resource object does not have enough resources, destroy it
+				else
+				{
+					HitResource->Destroy();
+					check(GEngine != nullptr);
+					GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Resource Depleted"));
+				}
 			}
 		}
 
