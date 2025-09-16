@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "Camera/CameraComponent.h"
 #include "Resource_M.h"
+#include "Kismet/GameplayStatics.h"
 #include "PlayerChar.generated.h"
 
 UCLASS()
@@ -60,19 +61,22 @@ public:
 
 	//Resource Collection
 	UPROPERTY(EditAnywhere, Category = "Resources")
-	int Wood;
+		int Wood;
 
 	UPROPERTY(EditAnywhere, Category = "Resources")
-	int Stone;
+		int Stone;
 
 	UPROPERTY(EditAnywhere, Category = "Resources")
-	int Berry;
+		int Berry;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resources")
-	TArray<int> ResourcesArray;
+		TArray<int> ResourcesArray;
 
 	UPROPERTY(EditAnywhere, Category = "Resources")
-	TArray<FString> ResourcesNameArray;
+		TArray<FString> ResourcesNameArray;
+
+	UPROPERTY(EditAnywhere, Category = "Hit Marker")
+		UMaterialInterface* hitDecal;
 
 	//Functions to modify player stats
 	UFUNCTION(BlueprintCallable)
