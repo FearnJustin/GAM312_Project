@@ -44,6 +44,8 @@ void APlayerChar::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	playerUI->UpdateBars(Health, Hunger, Stamina);
+
 	//If player is building, update building part location to be in front of player
 	if (isBuilding)
 	{
