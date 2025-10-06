@@ -36,6 +36,14 @@ void APlayerChar::BeginPlay()
 	//Add timer for stats decrease on player every 2 seconds
 	FTimerHandle StatsTimerHandle;
 	GetWorld()->GetTimerManager().SetTimer(StatsTimerHandle, this, &APlayerChar::DecreaseStats, 2.0f, true);
+
+	//when game starts sets official value to 0
+	if (objWidget)
+	{
+		objWidget->UpdatebuildOBJ(0.0f);
+		objWidget->UpdatematOBJ(0.0f);
+
+	}
     
 }
 
@@ -141,6 +149,12 @@ void APlayerChar::FindObject()
 					{
 						GiveResource(resourceValue, hitName);
 
+						//Update mats collected objective
+						matsCollected = matsCollected + resourceValue;
+
+						//Update objective widget
+						objWidget->UpdatematOBJ(matsCollected);
+
 						check(GEngine != nullptr);
 						GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Resource Collected"));
 
@@ -160,10 +174,14 @@ void APlayerChar::FindObject()
 
 		}
 	}
-
+	//If player is building, finalize building part placement
 	else
 	{
 		isBuilding = false;
+		objectsBuilt = objectsBuilt + 1.0f;
+		
+		//Update objective widget
+		objWidget->UpdatebuildOBJ(objectsBuilt);
 	}
 
 }
